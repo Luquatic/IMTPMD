@@ -13,8 +13,10 @@ public class course_activity extends AppCompatActivity {
         setContentView(R.layout.activity_course_activity);
 
         // set selected course year as title
-        studiejaar = getIntent().getExtras().get("Jaar").toString();
-        student_naam = getIntent().getExtras().get("student").toString();
+        studiejaar = getIntent().getStringExtra("Jaar");
+        student_naam = getIntent().getStringExtra("student");
         setTitle(studiejaar + " van " + student_naam);
+
+
     }
 }
