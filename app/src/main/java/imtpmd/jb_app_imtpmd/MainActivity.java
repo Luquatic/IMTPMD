@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 String lsn = jaar_list_view.getItemAtPosition(position).toString();
 
                 // intent to switch to room
-                if (lsn.equals("Keuzevakken")) {
+                if (lsn.equals("Keuzevakken en projecten")) {
                     Intent keuzevakken_intent = new Intent(getApplicationContext(), KeuzeActivity.class);
                     keuzevakken_intent.putExtra("student", final_studie_naam);
                     startActivity(keuzevakken_intent);
