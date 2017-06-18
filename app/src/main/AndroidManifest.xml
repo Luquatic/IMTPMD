@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".course_activity" />
-        <activity android:name=".KeuzeActivity"></activity>
+        <activity android:name=".KeuzeActivity" />
+        <activity android:name=".Compose"></activity>
     </application>
 
 </manifest>
