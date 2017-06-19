@@ -8,6 +8,7 @@
 
     <ListView
         android:id="@+id/jaar_list"
+        android:orderInCategory="100"
         android:layout_width="368dp"
         android:layout_height="495dp"
         android:layout_alignParentBottom="true"

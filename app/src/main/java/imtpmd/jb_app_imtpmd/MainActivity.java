@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import org.w3c.dom.Text;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -74,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         // listview for course years
         jaar_list_view = (ListView) findViewById(R.id.jaar_list);
 
-
         // arrayadapter for jaar_list_view listview
         jaar_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, jaar_list);
         jaar_list_view.setAdapter(jaar_adapter);
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 jaar_list.clear();
                 jaar_list.addAll(set);
+                Collections.sort(jaar_list);
                 jaar_adapter.notifyDataSetChanged();
             }
 
