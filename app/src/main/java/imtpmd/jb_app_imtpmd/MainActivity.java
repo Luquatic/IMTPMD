@@ -125,22 +125,22 @@ public class MainActivity extends AppCompatActivity {
                     keuzevakken_intent.putExtra("student", final_studie_naam);
                     startActivity(keuzevakken_intent);
                 }
-                else if (lsn.equals("Studiejaar 1")) {
+                if (lsn.equals("Studiejaar 1")) {
                     Intent intent = new Intent(getApplicationContext(), StudieJaar1Activity.class);
                     intent.putExtra("student", final_studie_naam);
                     startActivity(intent);
                 }
-                else if (lsn.equals("Studiejaar 2")) {
+                if (lsn.equals("Studiejaar 2")) {
                     Intent intent = new Intent(getApplicationContext(), StudieJaar2Activity.class);
                     intent.putExtra("student", final_studie_naam);
                     startActivity(intent);
                 }
-                else if (lsn.equals("Studiejaar 3")) {
+                if (lsn.equals("Studiejaar 3")) {
                     Intent intent = new Intent(getApplicationContext(), StudieJaar3Activity.class);
                     intent.putExtra("student", final_studie_naam);
                     startActivity(intent);
                 }
-                else if (lsn.equals("Studiejaar 4")) {
+                if (lsn.equals("Studiejaar 4")) {
                     Intent intent = new Intent(getApplicationContext(), StudieJaar4Activity.class);
                     intent.putExtra("student", final_studie_naam);
                     startActivity(intent);
