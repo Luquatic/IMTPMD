@@ -1,9 +1,12 @@
 package imtpmd.jb_app_imtpmd;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -22,6 +25,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
 import java.io.Console;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +46,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import imtpmd.jb_app_imtpmd.Models.CourseModel;
+import imtpmd.jb_app_imtpmd.content.VakContent;
 
 import static imtpmd.jb_app_imtpmd.R.string.settings;
 
@@ -64,10 +75,6 @@ public class MainActivity extends AppCompatActivity {
         boolean askedForName = settings.getBoolean("askedforname", false);
         final String student = settings.getString("student_name", "");
 
-
-
-
-
         // set app title
         setTitle("Overzicht");
 
@@ -89,6 +96,20 @@ public class MainActivity extends AppCompatActivity {
         if (name_check == null && askedForName) {
             get_student_name();
         }
+
+        Context context2 = getApplicationContext();
+
+        // get student name from SharedPreferences
+        final String final_studie_naam = PreferenceManager.getDefaultSharedPreferences(context2).getString("student_name", student_name);
+
+        // button
+        Button button = (Button) findViewById(R.id.testButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestSubjects();
+            }
+        });
 
         // listview for course years
         jaar_list_view = (ListView) findViewById(R.id.jaar_list);
@@ -148,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (lsn.equals("Studiejaar 2")) {
                     Intent intent = new Intent(getApplicationContext(), StudieJaar2Activity.class);
+                    requestSubjects();
                     intent.putExtra("student", final_studie_naam);
                     startActivity(intent);
                 }
@@ -166,6 +188,46 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void goTo() {
+        Intent intent = new Intent(getApplicationContext(), StudieJaar1Activity.class);
+        startActivity(intent);
+    }
+
+    private void requestSubjects(){
+        Type type = new TypeToken<List<CourseModel>>(){}.getType();
+
+        GsonRequest<List<CourseModel>> request = new GsonRequest<>("http://aid.jesseyfransen.com/api/medtgrades",
+                type, null, new Response.Listener<List<CourseModel>>() {
+            @Override
+            public void onResponse(List<CourseModel> response) {
+                processRequestSucces(response);
+                Log.e("Request", ": success");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                processRequestError(error);
+                Log.e("Request", ": error");
+            }
+        });
+        VolleyHelper.getInstance(this).addToRequestQueue(request);
+    }
+
+    private void processRequestSucces(List<CourseModel> vakken ){
+
+        VakContent.ITEMS.clear();
+        for(CourseModel vak:vakken) {
+            VakContent.addItem(vak);
+        }
+        goTo();
+    }
+
+    private void processRequestError(VolleyError error){
+        // WAT ZULLEN WE HIERMEE DOEN ?? - niets..
+    }
+
+
 
     // alertdialog that shows app information
     public void show_app_info() {
