@@ -1,4 +1,4 @@
-package git;
+package imtpmd.jb_app_imtpmd;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import imtpmd.jb_app_imtpmd.R;
 
 /**
  * Created by Luquatic on 19-6-2017.
