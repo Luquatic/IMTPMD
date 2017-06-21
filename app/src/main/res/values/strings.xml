@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">IT Grades</string>
-    <string name="app_description">Review your course</string>
+    <string name="app_name">MEDT Grades</string>
+    <string name="app_description">Review your media technology course</string>
     <string name="settings">Instellingen</string>
+    <string name="reset_settings">Herstel de gegevens van de applicatie</string>
+
 </resources>

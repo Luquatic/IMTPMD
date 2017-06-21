@@ -6,13 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +38,7 @@ public class KeuzeActivity extends AppCompatActivity {
     private int ec;
     private static final String TAG = "KeuzeActivity";
     private DatabaseHelper dbHelper;
+
 
 
     @Override
@@ -83,8 +87,21 @@ public class KeuzeActivity extends AppCompatActivity {
             }
         });
 
+        // make back button always go back to mainactivity.java
+
+
     }
 
+    // makes back button always go back to mainactivity (not to add_course_activity, if in activity stack)
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            startActivity(new Intent(getApplicationContext(),MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    // adding data to list
     public void addToList() {
         Log.d(TAG, "Inserting to list");
 

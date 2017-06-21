@@ -24,7 +24,8 @@
         <activity android:name=".StudieJaar1Activity" />
         <activity android:name=".StudieJaar2Activity" />
         <activity android:name=".StudieJaar3Activity" />
-        <activity android:name=".StudieJaar4Activity" ></activity>
+        <activity android:name=".StudieJaar4Activity" />
+        <activity android:name=".EcActivity"></activity>
     </application>
 
 </manifest>

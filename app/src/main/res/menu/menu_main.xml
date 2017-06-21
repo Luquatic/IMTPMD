@@ -10,4 +10,10 @@
         android:title="@string/settings"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/education"
+        android:orderInCategory="100"
+        android:title="Studiepunten"
+        app:showAsAction="never" />
+
 </menu>

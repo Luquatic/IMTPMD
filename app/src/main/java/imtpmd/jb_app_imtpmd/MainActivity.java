@@ -12,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +38,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import static imtpmd.jb_app_imtpmd.R.string.settings;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         boolean askedForName = settings.getBoolean("askedforname", false);
         final String student = settings.getString("student_name", "");
 
+
+
+
+
         // set app title
         setTitle("Overzicht");
 
@@ -72,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
             edit_dialog.putBoolean("askedforname", true);
             edit_dialog.commit();
 
+        }
+
+
+        // check if name is null
+        Context context = getApplicationContext();
+        String name_check = PreferenceManager.getDefaultSharedPreferences(context).getString("student_name", student_name);
+        if (name_check == null && askedForName) {
+            get_student_name();
         }
 
         // listview for course years
@@ -149,18 +165,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
 
     // alertdialog that shows app information
     public void show_app_info() {
         AlertDialog.Builder infobuilder = new AlertDialog.Builder(this);
-        infobuilder.setTitle("Welkom bij IT Grades!");
+        infobuilder.setTitle("Welkom bij Medt Grades!");
         infobuilder.setMessage("Met deze app kan je je vakken bekijken per studiejaar, aanvinken of je ze gehaald hebt, en keuzevakken toevoegen.");
-        final TextView text = new TextView(this);
+
         // action when pressed OK
         infobuilder.setPositiveButton("Ga door", new DialogInterface.OnClickListener() {
             @Override
@@ -182,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         namebuilder.setTitle("Geef je naam");
         final EditText namefield = new EditText(this);
         namebuilder.setView(namefield);
-
+        namebuilder.setCancelable(false);
         //action when name entered and "Ga door" pressed
         namebuilder.setPositiveButton("Ga door", new DialogInterface.OnClickListener() {
             @Override
@@ -194,13 +206,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // action when cancel is pressed
-        namebuilder.setNegativeButton("Annuleer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
 
         namebuilder.show();
     }
@@ -216,13 +221,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        String final_student_name = PreferenceManager.getDefaultSharedPreferences(this).getString("student_name", student_name);
 
+        // go to settings activity
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, Settings.class);
+            intent.putExtra("student", final_student_name);
             startActivity(intent);
             return true;
         }
 
+        // go to EcActivity
+        if (id == R.id.education) {
+            Intent intent = new Intent(MainActivity.this, EcActivity.class);
+            intent.putExtra("student", final_student_name);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

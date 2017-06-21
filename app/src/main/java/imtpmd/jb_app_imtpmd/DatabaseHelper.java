@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String TAG = "DatabaseHelper";
 
     private static final String TABLE_NAME = "table_course";
+
     private static final String col1 = "ID";
     private static final String col2 = "course_name";
     private static final String col3 = "course_points";
@@ -27,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + "("
-                + col2 + " TEXT, " + col3 + " TEXT, " + col1 + " TEXT)";
+                + col2 + " TEXT, " + col3 + " INTEGER, " + col1 + " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -37,7 +38,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean addData(String item, String ec) {
+
+    public void delDB(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
+    public boolean addData(String item, int ec) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col2, item);

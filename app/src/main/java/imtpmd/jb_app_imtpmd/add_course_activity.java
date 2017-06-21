@@ -46,7 +46,7 @@ public class add_course_activity extends AppCompatActivity {
                 if (course_edit.getText().toString().trim().length() > 0 && ec_edit.getText().toString().trim().length() > 0 ) {
                     // getting variables from textfields
                     String course_name = course_edit.getText().toString();
-                    String EC = ec_edit.getText().toString();
+                    int EC = Integer.parseInt(ec_edit.getText().toString());
 
                     // adding the data
                     addData(course_name, EC);
@@ -63,7 +63,7 @@ public class add_course_activity extends AppCompatActivity {
         });
     }
 
-    public void addData (String item, String ec) {
+    public void addData (String item, int ec) {
         Context context = getApplicationContext();
         // boolean to insert data in sqldatabase
         boolean insertData = mDatabaseHelper.addData(item, ec);
