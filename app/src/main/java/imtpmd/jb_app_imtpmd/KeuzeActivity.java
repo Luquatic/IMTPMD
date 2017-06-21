@@ -1,11 +1,18 @@
 package imtpmd.jb_app_imtpmd;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
+import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,18 +20,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import static android.media.CamcorderProfile.get;
 
 public class KeuzeActivity extends AppCompatActivity {
     private FloatingActionButton fab_add;
     private String student_naam;
     private ListView keuze_list;
-    private boolean wantDelete;
+    boolean wantDelete;
+    private ArrayAdapter adapter;
+    private ArrayList<Course> courseItems;
+    private String vak;
+    private int ec;
+    private static final String TAG = "KeuzeActivity";
+    private DatabaseHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_keuze);
+
+        // setting title
         student_naam = getIntent().getStringExtra("student");
         setTitle("Keuzevakken en projecten van " + student_naam);
 
@@ -32,8 +50,10 @@ public class KeuzeActivity extends AppCompatActivity {
         //initialzing elements
         fab_add = (FloatingActionButton)findViewById(R.id.fab_add);
         keuze_list = (ListView) findViewById(R.id.keuze_list);
+        dbHelper = new DatabaseHelper(this);
 
-        // initializing list
+        addToList();
+
 
 
         // make fab go to other activity
@@ -45,45 +65,48 @@ public class KeuzeActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
-
-    }
-
-    protected void onStart() {
-        super.onStart();
-        final ArrayList<String> courseItems = new ArrayList<String>();
-        final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, courseItems);
-        keuze_list.setAdapter(adapter);
-
         // long press deletes item
         keuze_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 showDeleteDialog();
-                if (wantDelete) {
-                    courseItems.remove(position);
-                    adapter.notifyDataSetChanged();
 
+                if (!wantDelete) {
+
+                    Log.d(TAG, "Sorry m8, couldn't delete");
+                }
+                else {
+                    dbHelper.remove(id);
+                    Log.d(TAG, "I deleted that for ya!");
                 }
                 return true;
-
-
             }
         });
 
-        if (getIntent().hasExtra("vak") && getIntent().hasExtra("ec")) {
-            String vak = getIntent().getStringExtra("vak");
-            String ec = getIntent().getStringExtra("ec");
-            courseItems.add(vak);
-            adapter.notifyDataSetChanged();
-        }
     }
+
+    public void addToList() {
+        Log.d(TAG, "Inserting to list");
+
+        // get data from db
+        Cursor c = dbHelper.getData();
+        courseItems = new ArrayList<Course>();
+
+        // iterating through db
+        while (c.moveToNext()) {
+            String course = c.getString(0);
+            String punten = c.getString(1);
+            courseItems.add(new Course(course, punten));
+        }
+
+        // make adapter and set it to listview
+        adapter = new ArrayAdapter<Course>(this, android.R.layout.simple_list_item_1, courseItems);
+        keuze_list.setAdapter(adapter);
+
+    }
+
+
+
 
 
     private void showDeleteDialog() {
@@ -96,16 +119,16 @@ public class KeuzeActivity extends AppCompatActivity {
         infobuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
                 wantDelete = true;
+                dialog.cancel();
             }
         });
 
         infobuilder.setNegativeButton("Nee", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
                 wantDelete = false;
+                dialog.cancel();
             }
         });
         infobuilder.show();
