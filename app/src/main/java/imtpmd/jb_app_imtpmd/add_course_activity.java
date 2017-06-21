@@ -23,7 +23,10 @@ public class add_course_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
-        setTitle("Voeg vak of project toe");
+
+
+        setTitle("Voeg een vak of project toe");
+        final Context context = getApplicationContext();
 
 
         // initializing elements
@@ -35,7 +38,7 @@ public class add_course_activity extends AppCompatActivity {
 
 
 
-        // action on savebutton
+        // action on save button
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

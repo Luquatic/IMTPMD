@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">IT Grades</string>
     <string name="app_description">Review your course</string>
+    <string name="settings">Instellingen</string>
 </resources>

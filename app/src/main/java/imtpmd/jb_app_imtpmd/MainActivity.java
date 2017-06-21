@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +30,8 @@ import org.w3c.dom.Text;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -72,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         // listview for course years
         jaar_list_view = (ListView) findViewById(R.id.jaar_list);
 
-
         // arrayadapter for jaar_list_view listview
         jaar_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, jaar_list);
         jaar_list_view.setAdapter(jaar_adapter);
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 jaar_list.clear();
                 jaar_list.addAll(set);
+                Collections.sort(jaar_list);
                 jaar_adapter.notifyDataSetChanged();
             }
 
@@ -120,16 +125,26 @@ public class MainActivity extends AppCompatActivity {
                     keuzevakken_intent.putExtra("student", final_studie_naam);
                     startActivity(keuzevakken_intent);
                 }
-                else {
-                    Intent intent = new Intent(getApplicationContext(), course_activity.class);
-                    // give study year and student name to intent
-                    intent.putExtra("Jaar", ((TextView)view).getText().toString());
+                if (lsn.equals("Studiejaar 1")) {
+                    Intent intent = new Intent(getApplicationContext(), StudieJaar1Activity.class);
                     intent.putExtra("student", final_studie_naam);
                     startActivity(intent);
                 }
-
-
-
+                if (lsn.equals("Studiejaar 2")) {
+                    Intent intent = new Intent(getApplicationContext(), StudieJaar2Activity.class);
+                    intent.putExtra("student", final_studie_naam);
+                    startActivity(intent);
+                }
+                if (lsn.equals("Studiejaar 3")) {
+                    Intent intent = new Intent(getApplicationContext(), StudieJaar3Activity.class);
+                    intent.putExtra("student", final_studie_naam);
+                    startActivity(intent);
+                }
+                if (lsn.equals("Studiejaar 4")) {
+                    Intent intent = new Intent(getApplicationContext(), StudieJaar4Activity.class);
+                    intent.putExtra("student", final_studie_naam);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -188,5 +203,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
         namebuilder.show();
+    }
+
+    // menu button top right
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    // menu event handler
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, Settings.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
