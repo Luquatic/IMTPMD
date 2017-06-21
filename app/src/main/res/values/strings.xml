@@ -2,4 +2,12 @@
     <string name="app_name">IT Grades</string>
     <string name="app_description">Review your course</string>
     <string name="settings">Instellingen</string>
+
+    <string-array name="periodes_array">
+        <item>Alle periodes</item>
+        <item>Periode 1</item>
+        <item>Periode 2</item>
+        <item>Periode 3</item>
+        <item>Periode 4</item>
+    </string-array>
 </resources>
