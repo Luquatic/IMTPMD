@@ -4,4 +4,11 @@
     <string name="settings">Instellingen</string>
     <string name="reset_settings">Herstel de gegevens van de applicatie</string>
 
+    <string-array name="periodes_array">
+        <item>Alle periodes</item>
+        <item>Periode 1</item>
+        <item>Periode 2</item>
+        <item>Periode 3</item>
+        <item>Periode 4</item>
+    </string-array>
 </resources>
