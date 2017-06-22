@@ -59,4 +59,9 @@ public class CourseModel {
     public void setGehaald(int gehaald) {
         this.gehaald = gehaald;
     }
+
+    @Override
+    public String toString() {
+        return ("Vak: " + naam + "\n" + "Punten: " + ec + "\n" + "Behaald: " + gehaald);
+    }
 }

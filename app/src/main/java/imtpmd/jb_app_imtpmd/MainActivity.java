@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
             // set boolean for dialog to true
             edit_dialog.putBoolean("askedforname", true);
-            edit_dialog.commit();
+            edit_dialog.apply();
 
         }
 
@@ -191,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void goTo() {
         Intent intent = new Intent(getApplicationContext(), StudieJaar1Activity.class);
+        String final_student_name = PreferenceManager.getDefaultSharedPreferences(this).getString("student_name", student_name);
+        intent.putExtra("student", final_student_name);
         startActivity(intent);
     }
 
