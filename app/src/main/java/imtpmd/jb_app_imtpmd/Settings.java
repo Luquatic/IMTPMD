@@ -17,9 +17,6 @@ import android.widget.RadioButton;
 
 import java.io.File;
 
-/**
- * Created by Luquatic on 19-6-2017.
- */
 
 public class Settings extends AppCompatActivity {
 

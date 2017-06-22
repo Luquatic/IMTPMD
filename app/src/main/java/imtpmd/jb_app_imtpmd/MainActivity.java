@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 Context context = getApplicationContext();
                 student_name = namefield.getText().toString();
                 // store name in sharedpreferences
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("student_name", student_name).commit();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("student_name", student_name).apply();
             }
         });
 

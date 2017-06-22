@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,13 +33,14 @@ public class KeuzeActivity extends AppCompatActivity {
     private FloatingActionButton fab_add;
     private String student_naam;
     private ListView keuze_list;
-    boolean wantDelete;
     private ArrayAdapter adapter;
     private ArrayList<Course> courseItems;
     private String vak;
     private int ec;
     private static final String TAG = "KeuzeActivity";
     private DatabaseHelper dbHelper;
+    private final static String BOOL = "bool";
+    private String TABLE_NAME = "table_courses";
 
 
 
@@ -50,15 +53,24 @@ public class KeuzeActivity extends AppCompatActivity {
         student_naam = getIntent().getStringExtra("student");
         setTitle("Keuzevakken en projecten van " + student_naam);
 
-
         //initialzing elements
         fab_add = (FloatingActionButton)findViewById(R.id.fab_add);
         keuze_list = (ListView) findViewById(R.id.keuze_list);
         dbHelper = new DatabaseHelper(this);
 
+        // setting dialog
+        SharedPreferences settings = getSharedPreferences(BOOL, 0);
+        boolean shownDialog = settings.getBoolean("showndialog", false);
+
+        // show dialog for first time
+        if(!shownDialog) {
+            SharedPreferences.Editor edit_dialog = settings.edit();
+            showInfo();
+            edit_dialog.putBoolean("showndialog", true);
+            edit_dialog.apply();
+        }
+
         addToList();
-
-
 
         // make fab go to other activity
         fab_add.setOnClickListener(new View.OnClickListener() {
@@ -68,27 +80,24 @@ public class KeuzeActivity extends AppCompatActivity {
             }
         });
 
-
-        // long press deletes item
+        // get course/project name and set it to 'behaald'
         keuze_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                showDeleteDialog();
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                int pos = (int) id;
+                String selectedFromList =(keuze_list.getItemAtPosition(pos).toString());
+                String[] parts = selectedFromList.split(" ");
+                String[] final_part = parts[1].split("\n");
+                String COURSE = final_part[0];
+                Log.d("course name", COURSE);
+                Log.d("You clicked ", "" + pos );
+                db.execSQL("UPDATE " + TABLE_NAME + " SET behaald = 'behaald' WHERE course_name = '" + COURSE + "'");
 
-                if (!wantDelete) {
-
-                    Log.d(TAG, "Sorry m8, couldn't delete");
-                }
-                else {
-                    dbHelper.remove(id);
-                    Log.d(TAG, "I deleted that for ya!");
-                }
+                finish();
+                startActivity(getIntent());
                 return true;
             }
         });
-
-        // make back button always go back to mainactivity.java
-
 
     }
 
@@ -113,43 +122,91 @@ public class KeuzeActivity extends AppCompatActivity {
         while (c.moveToNext()) {
             String course = c.getString(0);
             String punten = c.getString(1);
-            courseItems.add(new Course(course, punten));
+            String behaald = c.getString(2);
+            courseItems.add(new Course(course, punten, behaald));
         }
 
         // make adapter and set it to listview
         adapter = new ArrayAdapter<Course>(this, android.R.layout.simple_list_item_1, courseItems);
         keuze_list.setAdapter(adapter);
 
+
     }
 
 
+    // menu button top right
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_keuze, menu);
+        return true;
+    }
+
+    // menu event handler
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
 
+        // go to settings activity
+        if (id == R.id.clean_list) {
+            showDeleteDialog();
 
-    private void showDeleteDialog() {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    // shows confirmation dialog if user wants to clean list
+    private boolean showDeleteDialog() {
         AlertDialog.Builder infobuilder = new AlertDialog.Builder(this);
         infobuilder.setCancelable(false);
-        infobuilder.setTitle("Vak/project verwijderen");
-        infobuilder.setMessage("Weet je zeker dat je het vak of project wilt verwijderen?");
+        infobuilder.setTitle("Vakken/projecten verwijderen");
+        infobuilder.setMessage("Weet je zeker dat je de lijst leeg wilt maken?");
         final TextView text = new TextView(this);
         // action when pressed OK
         infobuilder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                wantDelete = true;
+
                 dialog.cancel();
+
+                // cleaning list
+                Context context = getApplicationContext();
+                context.deleteDatabase(TABLE_NAME);
+                finish();
+                startActivity(getIntent());
+
             }
         });
+
 
         infobuilder.setNegativeButton("Nee", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                wantDelete = false;
                 dialog.cancel();
             }
         });
+
         infobuilder.show();
 
+    return true;
     }
 
+    private void showInfo() {
+        AlertDialog.Builder infobuilder = new AlertDialog.Builder(this);
+        infobuilder.setTitle("Keuzevakken en projecten");
+        infobuilder.setMessage("Voeg hier je keuzevakken en projecten toe. Houdt een vak/project ingedrukt om aan te geven dat je hem behaald hebt.");
+        infobuilder.setCancelable(false);
+
+        // action when pressed OK
+        infobuilder.setPositiveButton("Ga door", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        infobuilder.show();
+    }
 }

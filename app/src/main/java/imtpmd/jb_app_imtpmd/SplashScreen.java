@@ -33,7 +33,7 @@ public class SplashScreen extends AppCompatActivity {
         actionBar.hide();
 
         // initializing attributes
-        app_name = (TextView) findViewById(R.id.nameApp);
+//        app_name = (TextView) findViewById(R.id.nameApp);
         app_description = (TextView) findViewById(R.id.descriptionApp);
 
         // handler for splashscreen (redirects splashscreen to webview activity after 3500 seconds

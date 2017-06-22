@@ -47,9 +47,9 @@ public class add_course_activity extends AppCompatActivity {
                     // getting variables from textfields
                     String course_name = course_edit.getText().toString();
                     int EC = Integer.parseInt(ec_edit.getText().toString());
-
+                    String bool = "Niet behaald";
                     // adding the data
-                    addData(course_name, EC);
+                    addData(course_name, EC, bool);
 
                     // starting the intent
                     Intent goBack = new Intent(add_course_activity.this, KeuzeActivity.class);
@@ -63,10 +63,10 @@ public class add_course_activity extends AppCompatActivity {
         });
     }
 
-    public void addData (String item, int ec) {
+    public void addData (String item, int ec, String bool) {
         Context context = getApplicationContext();
         // boolean to insert data in sqldatabase
-        boolean insertData = mDatabaseHelper.addData(item, ec);
+        boolean insertData = mDatabaseHelper.addData(item, ec, bool);
 
         if (insertData) {
             Toast.makeText(context, "Vak toegevoegd!", Toast.LENGTH_SHORT).show();

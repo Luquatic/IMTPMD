@@ -15,11 +15,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final String TABLE_NAME = "table_course";
+    private static final String TABLE_NAME = "table_courses";
 
     private static final String col1 = "ID";
     private static final String col2 = "course_name";
     private static final String col3 = "course_points";
+    private static final String col4 = "behaald";
 
     public DatabaseHelper(Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -28,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + "("
-                + col2 + " TEXT, " + col3 + " INTEGER, " + col1 + " TEXT)";
+                + col2 + " TEXT, " + col3 + " INTEGER, " + col4 + " TEXT, " + col1 + " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -45,11 +46,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean addData(String item, int ec) {
+    public boolean addData(String item, int ec, String bool) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col2, item);
         contentValues.put(col3, ec);
+        contentValues.put(col4, bool);
         Log.d(TAG, "addData: Adding " + item + " and " + ec + " to " + TABLE_NAME);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
