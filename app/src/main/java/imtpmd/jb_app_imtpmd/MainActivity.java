@@ -117,6 +117,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(keuzevakken_intent);
             }
         });
+        Button btnEC = (Button) findViewById(R.id.btnEC);
+        btnEC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent studiepunten_intent = new Intent(MainActivity.this, EcActivity.class);
+                String final_student_name = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("student_name", student_name);
+                studiepunten_intent.putExtra("student", final_student_name);
+                startActivity(studiepunten_intent);
+            }
+        });
     }
 
     public void goTo() {

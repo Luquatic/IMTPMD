@@ -23,6 +23,7 @@ public class EcActivity extends AppCompatActivity {
     private TextView keuze_3;
     private TextView keuze_4;
     private DatabaseHelper dbHelper;
+    private String student_naam;
     private String TABLE_NAME = "table_courses";
     private String num;
 
@@ -31,7 +32,8 @@ public class EcActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ec);
-        setTitle("Studiepunten");
+        student_naam = getIntent().getStringExtra("student");
+        setTitle("Studiepunten van " +student_naam);
 
 
 
