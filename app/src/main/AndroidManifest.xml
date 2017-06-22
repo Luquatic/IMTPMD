@@ -23,10 +23,7 @@
         <activity android:name=".KeuzeActivity" />
         <activity android:name=".Settings" />
         <activity android:name=".add_course_activity" />
-        <activity android:name=".StudieJaar1Activity" />
-        <activity android:name=".StudieJaar2Activity" />
-        <activity android:name=".StudieJaar3Activity" />
-        <activity android:name=".StudieJaar4Activity" />
+        <activity android:name=".VakkenActivity" />
         <activity android:name=".EcActivity"></activity>
 
     </application>

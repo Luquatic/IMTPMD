@@ -1,56 +1,31 @@
 package imtpmd.jb_app_imtpmd;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.io.Console;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import imtpmd.jb_app_imtpmd.Models.CourseModel;
 import imtpmd.jb_app_imtpmd.content.VakContent;
-
-import static imtpmd.jb_app_imtpmd.R.string.settings;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,10 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
 
     // declaring variables private for class
-    private ListView jaar_list_view;
-    private ArrayAdapter jaar_adapter;
-    private ArrayList<String> jaar_list = new ArrayList<>();
     private String student_name;
+    private String jaar;
 
     // user name SharedPreferences
     public static final String DIALOG = "dialog";
@@ -102,104 +75,63 @@ public class MainActivity extends AppCompatActivity {
         // get student name from SharedPreferences
         final String final_studie_naam = PreferenceManager.getDefaultSharedPreferences(context2).getString("student_name", student_name);
 
-        // button
-        Button button = (Button) findViewById(R.id.testButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        // buttons
+        Button btnJaar1 = (Button) findViewById(R.id.btnJaar1);
+        btnJaar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestSubjects();
+                jaar = "1";
+                requestSubjects(jaar);
             }
         });
-
-        // listview for course years
-        jaar_list_view = (ListView) findViewById(R.id.jaar_list);
-
-        // arrayadapter for jaar_list_view listview
-        jaar_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, jaar_list);
-        jaar_list_view.setAdapter(jaar_adapter);
-
-        // make app request database course years
-        root.addValueEventListener(new ValueEventListener() {
+        Button btnJaar2 = (Button) findViewById(R.id.btnJaar2);
+        btnJaar2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // iterate through root children
-                Iterator i = dataSnapshot.getChildren().iterator();
-                Set<String> set = new HashSet<String>();
-
-                while (i.hasNext()) {
-                    set.add(((DataSnapshot)i.next()).getKey());
-                }
-                jaar_list.clear();
-                jaar_list.addAll(set);
-                Collections.sort(jaar_list);
-                jaar_adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                jaar = "2";
+                requestSubjects(jaar);
             }
         });
-
-        // listener to go to desired year
-        jaar_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
+        Button btnJaar3 = (Button) findViewById(R.id.btnJaar3);
+        btnJaar3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context2 = getApplicationContext();
-
-                // get student name from SharedPreferences
-                String final_studie_naam = PreferenceManager.getDefaultSharedPreferences(context2).getString("student_name", student_name);
-
-
-                // get name of clicked item
-                String lsn = jaar_list_view.getItemAtPosition(position).toString();
-
-                // intent to switch to room
-                if (lsn.equals("Keuzevakken en projecten")) {
-                    Intent keuzevakken_intent = new Intent(getApplicationContext(), KeuzeActivity.class);
-                    keuzevakken_intent.putExtra("student", final_studie_naam);
-                    startActivity(keuzevakken_intent);
-                }
-                if (lsn.equals("Studiejaar 1")) {
-                    Intent intent = new Intent(getApplicationContext(), StudieJaar1Activity.class);
-                    intent.putExtra("student", final_studie_naam);
-                    startActivity(intent);
-                }
-                if (lsn.equals("Studiejaar 2")) {
-                    Intent intent = new Intent(getApplicationContext(), StudieJaar2Activity.class);
-                    requestSubjects();
-                    intent.putExtra("student", final_studie_naam);
-                    startActivity(intent);
-                }
-                if (lsn.equals("Studiejaar 3")) {
-                    Intent intent = new Intent(getApplicationContext(), StudieJaar3Activity.class);
-                    intent.putExtra("student", final_studie_naam);
-                    startActivity(intent);
-                }
-                if (lsn.equals("Studiejaar 4")) {
-                    Intent intent = new Intent(getApplicationContext(), StudieJaar4Activity.class);
-                    intent.putExtra("student", final_studie_naam);
-                    startActivity(intent);
-                }
+            public void onClick(View v) {
+                jaar = "3";
+                requestSubjects(jaar);
             }
         });
-
-
+        Button btnJaar4 = (Button) findViewById(R.id.btnJaar4);
+        btnJaar4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jaar = "4";
+                requestSubjects(jaar);
+            }
+        });
+        Button btnKeuze = (Button) findViewById(R.id.btnKeuze);
+        btnKeuze.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent keuzevakken_intent = new Intent(getApplicationContext(), KeuzeActivity.class);
+                keuzevakken_intent.putExtra("student", final_studie_naam);
+                startActivity(keuzevakken_intent);
+            }
+        });
     }
 
     public void goTo() {
-        Intent intent = new Intent(getApplicationContext(), StudieJaar1Activity.class);
+        Intent intent = new Intent(getApplicationContext(), VakkenActivity.class);
         String final_student_name = PreferenceManager.getDefaultSharedPreferences(this).getString("student_name", student_name);
         intent.putExtra("student", final_student_name);
+        String final_jaar = PreferenceManager.getDefaultSharedPreferences(this).getString("jaar", jaar);
+        intent.putExtra("final_jaar", final_jaar);
         startActivity(intent);
     }
 
-    private void requestSubjects(){
+    private void requestSubjects(String jaar){
         Type type = new TypeToken<List<CourseModel>>(){}.getType();
 
-        GsonRequest<List<CourseModel>> request = new GsonRequest<>("http://aid.jesseyfransen.com/api/medtgrades",
+        GsonRequest<List<CourseModel>> request = new GsonRequest<>("http://aid.jesseyfransen.com/api/medtgrades/jaar/" +jaar + "/",
                 type, null, new Response.Listener<List<CourseModel>>() {
             @Override
             public void onResponse(List<CourseModel> response) {
