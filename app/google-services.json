@@ -1,27 +1,38 @@
 {
   "project_info": {
-    "project_number": "764315979594",
-    "firebase_url": "https://it-grades-326c6.firebaseio.com",
-    "project_id": "it-grades-326c6",
-    "storage_bucket": "it-grades-326c6.appspot.com"
+    "project_number": "933321233803",
+    "firebase_url": "https://imtpmd.firebaseio.com",
+    "project_id": "imtpmd",
+    "storage_bucket": "imtpmd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:764315979594:android:ff9dd9ff732ac8d7",
+        "mobilesdk_app_id": "1:933321233803:android:ff9dd9ff732ac8d7",
         "android_client_info": {
           "package_name": "imtpmd.jb_app_imtpmd"
         }
       },
       "oauth_client": [
         {
-          "client_id": "764315979594-n2lfl4eq4oocnk8qqij4n9k8j7eku82t.apps.googleusercontent.com",
+          "client_id": "933321233803-var3grjgprkn865c9qlmgobk77nniv9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "imtpmd.jb_app_imtpmd",
+            "certificate_hash": "32fe02a5f3dab548f7f978e6402f3899e5643bb8"
+          }
+        },
+        {
+          "client_id": "933321233803-beg55elvfjbvb74msi1v3v1hdtcmca1e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAO-PEBp5KvUDG9Hb-dwaPxDlbHF5TpWoI"
+          "current_key": "AIzaSyBJQpMoHF6o83p4nJkPI9TNG1G7l-YBbXw"
+        },
+        {
+          "current_key": "AIzaSyCRtc_qJm2F8JBaxHqhNzrZZerRZGC6U5M"
         }
       ],
       "services": {
@@ -29,8 +40,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933321233803-beg55elvfjbvb74msi1v3v1hdtcmca1e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

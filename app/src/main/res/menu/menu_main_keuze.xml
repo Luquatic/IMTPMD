@@ -5,17 +5,9 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/clean_list"
         android:orderInCategory="100"
-        android:title="@string/settings"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/education"
-        android:orderInCategory="100"
-        android:title="Studiepunten"
-        app:showAsAction="never" />
-
-
+        android:title="Lijst legen"
+        app:showAsAction="never"/>
 
 </menu>
