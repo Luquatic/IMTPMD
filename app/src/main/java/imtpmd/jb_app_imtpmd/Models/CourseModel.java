@@ -6,11 +6,11 @@ package imtpmd.jb_app_imtpmd.Models;
 
 public class CourseModel {
 
-    int jaar;
-    int periode;
-    String naam;
-    int ec;
-    int gehaald;
+    protected int jaar;
+    protected int periode;
+    public String naam;
+    protected int ec;
+    protected int gehaald;
 
     CourseModel(int jaar, int periode, String naam, int ec, int gehaald){
         this.jaar = jaar;
