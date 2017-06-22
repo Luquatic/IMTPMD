@@ -17,7 +17,9 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import imtpmd.jb_app_imtpmd.Models.CourseModel;
 import imtpmd.jb_app_imtpmd.R;
+import imtpmd.jb_app_imtpmd.content.VakContent;
 
 /**
  * Created by Luquatic on 19-6-2017.
@@ -28,11 +30,6 @@ public class StudieJaar1Activity extends AppCompatActivity {
     // declaring variables private for class
     private ListView vakken_list_view;
     private String student_naam;
-    private String alle_periodes[];
-    private String periode_1[];
-    private String periode_2[];
-    private String periode_3[];
-    private String periode_4[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,57 +38,6 @@ public class StudieJaar1Activity extends AppCompatActivity {
         setContentView(R.layout.activity_jaar);
         student_naam = getIntent().getStringExtra("student");
         setTitle("Studiejaar 1 van " + student_naam);
-
-        final String[] periode_1 = {
-                "IARCH",
-                "IIBPM",
-                "IHBO",
-                "IOPR1"
-        };
-
-        final String[] periode_2 = {
-                "IWDR",
-                "IRDB",
-                "IIBUI",
-                "INET",
-                "IPRODAM",
-                "IPOMEDT"
-        };
-
-        final String[] periode_3 = {
-                "IMUML",
-                "IOPR2",
-                "IFIT",
-                "IPOFIT",
-                "IPOSE"
-        };
-
-        final String[] periode_4 = {
-                "IPROV",
-                "ICOMMP",
-                "ISLP"
-        };
-
-        final String[] alle_periodes = {
-                "IARCH",
-                "IIBPM",
-                "IHBO",
-                "IOPR1",
-                "IWDR",
-                "IRDB",
-                "IIBUI",
-                "INET",
-                "IPRODAM",
-                "IPOMEDT",
-                "IMUML",
-                "IOPR2",
-                "IFIT",
-                "IPOFIT",
-                "IPOSE",
-                "IPROV",
-                "ICOMMP",
-                "ISLP"
-        };
 
         // spinner top right
         Spinner spinner = (Spinner) findViewById(R.id.periode_spinner);
@@ -105,15 +51,15 @@ public class StudieJaar1Activity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 if (item.equals("Alle Periodes")) {
-                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, alle_periodes));
-                } else if (item.equals("Periode 1")) {
-                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_1));
-                } else if (item.equals("Periode 2")) {
-                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_2));
-                } else if (item.equals("Periode 3")) {
-                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_3));
-                } else if (item.equals("Periode 4")) {
-                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_4));
+                    vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, VakContent.ITEMS));
+//                } else if (item.equals("Periode 1")) {
+//                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, ));
+//                } else if (item.equals("Periode 2")) {
+//                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_2));
+//                } else if (item.equals("Periode 3")) {
+//                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_3));
+//                } else if (item.equals("Periode 4")) {
+//                    vakken_list_view.setAdapter(new ArrayAdapter<String>(StudieJaar1Activity.this, android.R.layout.simple_list_item_1, periode_4));
                 }
             }
 
@@ -125,9 +71,11 @@ public class StudieJaar1Activity extends AppCompatActivity {
 
         // listview for course years
         vakken_list_view = (ListView) findViewById(R.id.vakken_list);
-
         // arrayadapter for jaar_list_view listview
-        vakken_list_view.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alle_periodes));
+        for(CourseModel vak:VakContent.ITEMS){
+            Log.e("vakobject",vak.getNaam());
+        }
+        vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(this, android.R.layout.simple_list_item_1, VakContent.ITEMS));
     }
 
     // menu button top right
