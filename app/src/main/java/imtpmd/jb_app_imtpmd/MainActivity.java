@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         VolleyHelper.getInstance(this).addToRequestQueue(request);
+
+
     }
 
     private void processRequestSucces(List<CourseModel> vakken ){
@@ -192,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         infobuilder.show();
     }
 
-
+    // function to get student name
     public void get_student_name() {
 
         // make dialog box

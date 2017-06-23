@@ -23,6 +23,7 @@ public class VolleyHelper {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
+
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>

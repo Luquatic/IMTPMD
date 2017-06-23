@@ -1,6 +1,7 @@
 package imtpmd.jb_app_imtpmd;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,7 +17,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,11 +85,37 @@ public class VakkenActivity extends AppCompatActivity {
 
             }
         });
+       
 
         // listview for course years
         vakken_list_view = (ListView) findViewById(R.id.vakken_list);
         // arrayadapter for jaar_list_view listview
         vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(this, android.R.layout.simple_list_item_1, VakContent.ITEMS));
+
+        // get course name and update this to 'behaald'
+        vakken_list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+
+                // this gets the ID
+                int pos = (int) id;
+                String selectedFromList =(vakken_list_view.getItemAtPosition(pos).toString());
+                // split selected String
+                String[] parts = selectedFromList.split(" ");
+                String[] final_part = parts[1].split("\n");
+                // gets course name
+                String COURSE = final_part[0];
+
+                // method to update database
+
+                Log.d("You clicked ", "" + pos );
+                Log.d("course name", COURSE);
+
+                //restart activity to update view
+                finish();
+                startActivity(getIntent());
+                return true;
+            }
+        });
     }
 
     private void requestSubjects(String jaar, String periode){
@@ -141,4 +174,5 @@ public class VakkenActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

@@ -51,7 +51,7 @@ public class KeuzeActivity extends AppCompatActivity {
 
         // setting title
         student_naam = getIntent().getStringExtra("student");
-        setTitle("Keuzevakken en projecten van " + student_naam);
+        setTitle("Keuzevakken van " + student_naam);
 
         //initialzing elements
         fab_add = (FloatingActionButton)findViewById(R.id.fab_add);
@@ -80,17 +80,26 @@ public class KeuzeActivity extends AppCompatActivity {
             }
         });
 
-        // get course/project name and set it to 'behaald'
+        // get coursename and set it to 'behaald'
         keuze_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                // initializing database object
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                // getting id
                 int pos = (int) id;
+
+                // getting string from listitem
                 String selectedFromList =(keuze_list.getItemAtPosition(pos).toString());
                 String[] parts = selectedFromList.split(" ");
                 String[] final_part = parts[1].split("\n");
+
+                //extracting course name from selected string
                 String COURSE = final_part[0];
                 Log.d("course name", COURSE);
                 Log.d("You clicked ", "" + pos );
+
+                // update course
                 db.execSQL("UPDATE " + TABLE_NAME + " SET behaald = 'behaald' WHERE course_name = '" + COURSE + "'");
 
                 finish();

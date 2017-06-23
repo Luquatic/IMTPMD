@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String col3 = "course_points";
     private static final String col4 = "behaald";
 
+
     public DatabaseHelper(Context context) {
         super(context, TABLE_NAME, null, 1);
     }
