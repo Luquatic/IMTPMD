@@ -13,9 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +31,9 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import imtpmd.jb_app_imtpmd.Models.CourseModel;
 import imtpmd.jb_app_imtpmd.content.VakContent;
@@ -85,7 +93,7 @@ public class VakkenActivity extends AppCompatActivity {
 
             }
         });
-       
+
 
         // listview for course years
         vakken_list_view = (ListView) findViewById(R.id.vakken_list);
@@ -109,6 +117,7 @@ public class VakkenActivity extends AppCompatActivity {
 
                 Log.d("You clicked ", "" + pos );
                 Log.d("course name", COURSE);
+                postSubjects(COURSE);
 
                 //restart activity to update view
                 finish();
@@ -116,6 +125,43 @@ public class VakkenActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void postSubjects(String COURSE) {
+        String url = "http://aid.jesseyfransen.com/api/medtgrades/update/" +COURSE;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response).getJSONObject("form");
+                            String site = jsonResponse.getString("site"),
+                                    network = jsonResponse.getString("network");
+                            System.out.println("Site: "+site+"\nNetwork: "+network);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<>();
+                // the POST parameters:
+                params.put("site", "code");
+                params.put("network", "tutsplus");
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(postRequest);
     }
 
     private void requestSubjects(String jaar, String periode){
