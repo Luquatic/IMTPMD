@@ -102,8 +102,11 @@ public class KeuzeActivity extends AppCompatActivity {
                 // update course
                 db.execSQL("UPDATE " + TABLE_NAME + " SET behaald = 'behaald' WHERE course_name = '" + COURSE + "'");
 
+                // restart activity
                 finish();
+                overridePendingTransition( 0, 0);
                 startActivity(getIntent());
+                overridePendingTransition( 0, 0);
                 return true;
             }
         });
@@ -184,7 +187,9 @@ public class KeuzeActivity extends AppCompatActivity {
                 Context context = getApplicationContext();
                 context.deleteDatabase(TABLE_NAME);
                 finish();
+                overridePendingTransition( 0, 0);
                 startActivity(getIntent());
+                overridePendingTransition( 0, 0);
 
             }
         });

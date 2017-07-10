@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import imtpmd.jb_app_imtpmd.Models.CourseModel;
 import imtpmd.jb_app_imtpmd.content.VakContent;
@@ -50,6 +51,8 @@ public class VakkenActivity extends AppCompatActivity {
     private String student_naam;
     private String jaar;
     private String periode;
+    private Spinner spinner;
+    private ArrayAdapter<CharSequence> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +64,15 @@ public class VakkenActivity extends AppCompatActivity {
         setTitle("Studiejaar " +jaar +" van " + student_naam);
 
         // spinner top right
-        Spinner spinner = (Spinner) findViewById(R.id.periode_spinner);
+        spinner = (Spinner) findViewById(R.id.periode_spinner);
+
         // create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.periodes_array, android.R.layout.simple_spinner_item);
+        adapter = ArrayAdapter.createFromResource(this, R.array.periodes_array, android.R.layout.simple_spinner_item);
+
         // specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -107,25 +113,29 @@ public class VakkenActivity extends AppCompatActivity {
                 // this gets the ID
                 int pos = (int) id;
                 String selectedFromList =(vakken_list_view.getItemAtPosition(pos).toString());
+
                 // split selected String
                 String[] parts = selectedFromList.split(" ");
                 String[] final_part = parts[1].split("\n");
+
                 // gets course name
                 String COURSE = final_part[0];
 
                 // method to update database
-
                 Log.d("You clicked ", "" + pos );
                 Log.d("course name", COURSE);
                 postSubjects(COURSE);
 
-                //restart activity to update view
-                finish();
-                startActivity(getIntent());
+
+
+
                 return true;
             }
         });
     }
+
+
+
 
     private void postSubjects(String COURSE) {
         String url = "http://aid.jesseyfransen.com/api/medtgrades/update/" +COURSE;
@@ -162,6 +172,7 @@ public class VakkenActivity extends AppCompatActivity {
             }
         };
         Volley.newRequestQueue(this).add(postRequest);
+
     }
 
     private void requestSubjects(String jaar, String periode){
@@ -182,6 +193,7 @@ public class VakkenActivity extends AppCompatActivity {
             }
         });
         VolleyHelper.getInstance(this).addToRequestQueue(request);
+
     }
 
     private void processRequestSucces(List<CourseModel> vakken ){
@@ -190,10 +202,12 @@ public class VakkenActivity extends AppCompatActivity {
         for(CourseModel vak:vakken) {
             VakContent.addItem(vak);
         }
+
         // listview for course years
         vakken_list_view = (ListView) findViewById(R.id.vakken_list);
         // arrayadapter for jaar_list_view listview
         vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(this, android.R.layout.simple_list_item_1, VakContent.ITEMS));
+
     }
 
     private void processRequestError(VolleyError error){
