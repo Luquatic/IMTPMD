@@ -1,16 +1,11 @@
 package imtpmd.jb_app_imtpmd;
 
 
-import android.app.ActionBar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,19 +18,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import imtpmd.jb_app_imtpmd.Models.CourseModel;
-import imtpmd.jb_app_imtpmd.content.VakContent;
 
 public class EcActivity extends AppCompatActivity {
 
@@ -48,7 +32,7 @@ public class EcActivity extends AppCompatActivity {
     private int ec_2;
     private int ec_3;
     private int ec_4;
-    private int number;
+    private String number;
     private PieChart chart;
     private int ec_data[];
     private String ec_name[];
@@ -83,7 +67,13 @@ public class EcActivity extends AppCompatActivity {
         }
 
         // get ec from years
-        ec_1 = getRequest(1);
+        ec_1 = getRequest(1, new VolleyCallback() {
+            @Override
+            public void onSucces(String result) {
+            }
+        });
+
+        Log.d("EC TEST = ", String.valueOf(ec_1));
 
 
 
@@ -133,14 +123,15 @@ public class EcActivity extends AppCompatActivity {
     }
 
     // GET request to get behaalde ec from database per year
-    private int getRequest(int jaar) {
+    private int getRequest(int jaar, final VolleyCallback callback) {
         String url = "http://aid.jesseyfransen.com/api/medtgrades/jaar/" + jaar + "/ec";
         final RequestQueue requestQueue = Volley.newRequestQueue(EcActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("RESPONSE IS", response);
-                number = Integer.parseInt(response);
+                number = response;
+                callback.onSucces(number);
                 requestQueue.stop();
 
             }
@@ -152,12 +143,12 @@ public class EcActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(stringRequest);
-        Log.d("NUMBER IS: ", "" + number);
-        return number;
-
+        return jaar;
     }
 
-
+    public interface VolleyCallback {
+        void onSucces(String result);
+    }
 }
 
 
