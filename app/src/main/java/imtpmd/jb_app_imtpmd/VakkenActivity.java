@@ -2,6 +2,7 @@ package imtpmd.jb_app_imtpmd;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,9 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +34,9 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import imtpmd.jb_app_imtpmd.Models.CourseModel;
 import imtpmd.jb_app_imtpmd.content.VakContent;
@@ -106,9 +117,9 @@ public class VakkenActivity extends AppCompatActivity {
                 String COURSE = final_part[0];
 
                 // method to update database
-
                 Log.d("You clicked ", "" + pos );
                 Log.d("course name", COURSE);
+                postSubjects(COURSE);
 
                 //restart activity to update view
                 finish();
@@ -116,6 +127,32 @@ public class VakkenActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void postSubjects(String COURSE) {
+        StringRequest sr = new StringRequest(Request.Method.POST, "http://aid.jesseyfransen.com/api/medtgrades/update/" + COURSE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("Response", response + "Yay empty response!");
+                communicator.onDialogMessage("De aanpassing is opgeslagen");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", courseId);
+                params.put("grade", grade.getText().toString());
+
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(getActivity().getApplicationContext()).add(sr);
     }
 
     private void requestSubjects(String jaar, String periode){
