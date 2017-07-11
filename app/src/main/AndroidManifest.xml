@@ -20,11 +20,14 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".course_activity" />
-        <activity android:name=".KeuzeActivity" />
+        <activity android:name=".KeuzeActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".Settings" />
         <activity android:name=".add_course_activity" />
-        <activity android:name=".VakkenActivity" />
-        <activity android:name=".EcActivity"></activity>
+        <activity android:name=".VakkenActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".EcActivity"
+            android:parentActivityName=".MainActivity"></activity>
 
     </application>
 

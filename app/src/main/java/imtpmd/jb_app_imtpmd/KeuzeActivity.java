@@ -53,6 +53,9 @@ public class KeuzeActivity extends AppCompatActivity {
         student_naam = getIntent().getStringExtra("student");
         setTitle("Keuzevakken van " + student_naam);
 
+        // add return button in toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //initialzing elements
         fab_add = (FloatingActionButton)findViewById(R.id.fab_add);
         keuze_list = (ListView) findViewById(R.id.keuze_list);

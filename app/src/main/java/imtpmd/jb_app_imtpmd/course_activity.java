@@ -20,6 +20,8 @@ public class course_activity extends AppCompatActivity {
         student_naam = getIntent().getStringExtra("student");
         setTitle(studiejaar + " van " + student_naam);
 
+        // add return button in toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 
