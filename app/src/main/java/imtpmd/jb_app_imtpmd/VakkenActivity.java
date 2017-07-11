@@ -125,9 +125,12 @@ public class VakkenActivity extends AppCompatActivity {
                 Log.d("You clicked ", "" + pos );
                 Log.d("course name", COURSE);
                 postSubjects(COURSE);
+
+                // refresh list to immediately show customized list
                 requestSubjects(jaar, periode);
                 vakken_list_view.deferNotifyDataSetChanged();
-
+                requestSubjects(jaar, periode);
+                vakken_list_view.deferNotifyDataSetChanged();
                 return true;
             }
         });
