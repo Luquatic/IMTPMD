@@ -47,7 +47,6 @@ public class VakkenActivity extends AppCompatActivity {
 
     // declaring variables private for class
     private ListView vakken_list_view;
-    private List<CourseModel> allePeriodes = new ArrayList<>(VakContent.ITEMS);
     private String student_naam;
     private String jaar;
     private String periode;
@@ -78,7 +77,8 @@ public class VakkenActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 if (item.equals("Alle periodes")) {
-                    vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(VakkenActivity.this, android.R.layout.simple_list_item_1, allePeriodes));
+                    periode = "5";
+                    requestSubjects(jaar, periode);
                 } else if (item.equals("Periode 1")) {
                     periode = "1";
                     requestSubjects(jaar, periode);
@@ -105,10 +105,10 @@ public class VakkenActivity extends AppCompatActivity {
         vakken_list_view = (ListView) findViewById(R.id.vakken_list);
         // arrayadapter for jaar_list_view listview
         vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(this, android.R.layout.simple_list_item_1, VakContent.ITEMS));
-
         // get course name and update this to 'behaald'
         vakken_list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                vakken_list_view.deferNotifyDataSetChanged();
 
                 // this gets the ID
                 int pos = (int) id;
@@ -125,17 +125,13 @@ public class VakkenActivity extends AppCompatActivity {
                 Log.d("You clicked ", "" + pos );
                 Log.d("course name", COURSE);
                 postSubjects(COURSE);
-
-
-
+                requestSubjects(jaar, periode);
+                vakken_list_view.deferNotifyDataSetChanged();
 
                 return true;
             }
         });
     }
-
-
-
 
     private void postSubjects(String COURSE) {
         String url = "http://aid.jesseyfransen.com/api/medtgrades/update/" +COURSE;
@@ -172,7 +168,6 @@ public class VakkenActivity extends AppCompatActivity {
             }
         };
         Volley.newRequestQueue(this).add(postRequest);
-
     }
 
     private void requestSubjects(String jaar, String periode){
@@ -207,7 +202,6 @@ public class VakkenActivity extends AppCompatActivity {
         vakken_list_view = (ListView) findViewById(R.id.vakken_list);
         // arrayadapter for jaar_list_view listview
         vakken_list_view.setAdapter(new ArrayAdapter<CourseModel>(this, android.R.layout.simple_list_item_1, VakContent.ITEMS));
-
     }
 
     private void processRequestError(VolleyError error){
