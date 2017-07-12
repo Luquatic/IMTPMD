@@ -1,17 +1,12 @@
 package imtpmd.jb_app_imtpmd;
 
 
-import android.app.ActionBar;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,19 +18,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import imtpmd.jb_app_imtpmd.Models.CourseModel;
-import imtpmd.jb_app_imtpmd.content.VakContent;
 
 public class EcActivity extends AppCompatActivity {
 
@@ -48,7 +32,7 @@ public class EcActivity extends AppCompatActivity {
     private int ec_2;
     private int ec_3;
     private int ec_4;
-    private int number;
+    public int number;
     private PieChart chart;
     private int ec_data[];
     private String ec_name[];
@@ -60,6 +44,7 @@ public class EcActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ec);
         student_naam = getIntent().getStringExtra("student");
         setTitle("Studiepunten van " + student_naam);
+
 
         // add return button in toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -82,21 +67,11 @@ public class EcActivity extends AppCompatActivity {
             cursor.close();
         }
 
-        // get ec from years
-        ec_1 = getRequest(1);
-
-
-
-
-        // getting data for chart
-        ec_data = new int[]{ec_keuze, ec_1, ec_2, ec_3, ec_4};
-        ec_name = new String[]{"Keuzevakken", "Studiejaar 1", "Studiejaar 2", "Studiejaar 3", "Studiejaar 4"};
-
-        // customizing and adding data to chart
-        chart.setDescription("");
-        chart.setHoleRadius(10f);
-        chart.setDrawSliceText(false);
-
+        // get ec from years by GET request
+        getRequest(1);
+        getRequest(2);
+        getRequest(3);
+        getRequest(4);
 
 
     }
@@ -104,6 +79,7 @@ public class EcActivity extends AppCompatActivity {
     // add data to chart
     private void addDataSet() {
 
+        // make arraylist for ec_data and ec_names
         ArrayList<Entry> yEntry = new ArrayList<>();
         ArrayList<String> xEntry = new ArrayList<>();
 
@@ -115,7 +91,6 @@ public class EcActivity extends AppCompatActivity {
             xEntry.add(ec_name[i]);
 
         }
-
 
         // create dataset
         PieDataSet pieDataSet = new PieDataSet(yEntry, "");
@@ -133,14 +108,20 @@ public class EcActivity extends AppCompatActivity {
     }
 
     // GET request to get behaalde ec from database per year
-    private int getRequest(int jaar) {
+    private void getRequest(final int jaar) {
         String url = "http://aid.jesseyfransen.com/api/medtgrades/jaar/" + jaar + "/ec";
         final RequestQueue requestQueue = Volley.newRequestQueue(EcActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE IS", response);
+
+                // parse response to int
                 number = Integer.parseInt(response);
+
+                // send int to method to put in global variables
+                setData(number, jaar);
+
+                // stop requestqueue
                 requestQueue.stop();
 
             }
@@ -151,9 +132,41 @@ public class EcActivity extends AppCompatActivity {
 
             }
         });
+
+        // add stringrequest to requestqueue
         requestQueue.add(stringRequest);
-        Log.d("NUMBER IS: ", "" + number);
-        return number;
+
+    }
+
+    private void makeData() {
+        // getting data for chart
+        ec_data = new int[]{ec_keuze, ec_1, ec_2, ec_3, ec_4};
+        ec_name = new String[]{"Keuzevakken", "Studiejaar 1", "Studiejaar 2", "Studiejaar 3", "Studiejaar 4"};
+
+        // customizing and adding data to chart
+        chart.setDescription("");
+        chart.setHoleRadius(10f);
+        chart.setDrawSliceText(false);
+
+        // call method to add data to graph
+        addDataSet();
+
+    }
+
+    // method to set data for graph
+    private void setData(int ec, int jaar) {
+        switch (jaar) {
+            case 1: ec_1 = ec;
+                    break;
+            case 2: ec_2 = ec;
+                    break;
+            case 3: ec_3 = ec;
+                    break;
+            case 4: ec_4 = ec;
+                    // only after all ec variables are edited, call makeData
+                    makeData();
+                    break;
+        }
 
     }
 
