@@ -157,21 +157,18 @@ public class EcActivity extends AppCompatActivity {
     private void setData(int ec, int jaar) {
         switch (jaar) {
             case 1: ec_1 = ec;
-                    break;
+                break;
             case 2: ec_2 = ec;
-                    break;
+                break;
             case 3: ec_3 = ec;
-                    break;
+                break;
             case 4: ec_4 = ec;
-                    // only after all ec variables are edited, call makeData
-                    makeData();
-                    break;
+                // only after all ec variables are edited, call makeData
+                makeData();
+                break;
         }
 
     }
 
 
 }
-
-
-
