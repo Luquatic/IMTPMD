@@ -25,7 +25,7 @@ public class add_course_activity extends AppCompatActivity {
         setContentView(R.layout.activity_add_course);
 
 
-        setTitle("Voeg een vak of project toe");
+        setTitle("Voeg een keuzevak toe");
         final Context context = getApplicationContext();
 
 

@@ -47,6 +47,6 @@ public class Course {
 
     @Override
     public String toString() {
-        return ("Vak/project: " + vak + "\n" + "Punten: " + ec + "\n" + "Behaald: " + behaald);
+        return ("Keuzevak: " + vak + "\n" + "Punten: " + ec + "\n" + "Behaald: " + behaald);
     }
 }
