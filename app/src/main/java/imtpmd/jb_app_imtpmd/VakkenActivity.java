@@ -1,8 +1,11 @@
 package imtpmd.jb_app_imtpmd;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -52,6 +55,7 @@ public class VakkenActivity extends AppCompatActivity {
     private String periode;
     private Spinner spinner;
     private ArrayAdapter<CharSequence> adapter;
+    private final static String BOOL2 = "bool2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,17 @@ public class VakkenActivity extends AppCompatActivity {
         // specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        // check if activity is opened for first time
+        // setting dialog
+        SharedPreferences settings = getSharedPreferences(BOOL2, 0);
+        boolean shownDialog = settings.getBoolean("showndialog", false);
+        if(!shownDialog) {
+            SharedPreferences.Editor edit_dialog = settings.edit();
+            showInfo();
+            edit_dialog.putBoolean("showndialog", true);
+            edit_dialog.apply();
+        }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -232,4 +247,20 @@ public class VakkenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void showInfo() {
+        AlertDialog.Builder infobuilder = new AlertDialog.Builder(this);
+        infobuilder.setTitle("Studievakken per jaar");
+        infobuilder.setMessage("Hier zie je de verplichte vakken per studiejaar. Houdt een vak ingedrukt om aan te geven dat je deze behaald hebt.");
+        infobuilder.setCancelable(false);
+
+        // action when pressed OK
+        infobuilder.setPositiveButton("Ga door", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        infobuilder.show();
+    }
 }
